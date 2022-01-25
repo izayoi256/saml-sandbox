@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::view('/login', 'auth/login');
+
+Route::post('/login', function () {
+    \Illuminate\Support\Facades\Auth::login(\App\Models\User::first());
+    return redirect('/');
+})->name('login');
+
+Route::post('/logout', function () {
+    try {
+        \Illuminate\Support\Facades\Auth::logout();
+    } catch (\Illuminate\Http\Exceptions\HttpResponseException $e) {
+    }
+    return redirect('/');
+})->name('logout');
