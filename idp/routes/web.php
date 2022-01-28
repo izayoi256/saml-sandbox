@@ -17,7 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/login', 'auth/login');
+Route::middleware('guest')->group(static function () {
+    Route::view('/login', 'auth.login');
+});
 
 Route::post('/login', function () {
     \Illuminate\Support\Facades\Auth::login(\App\Models\User::first());

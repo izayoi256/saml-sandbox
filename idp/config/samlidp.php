@@ -40,6 +40,14 @@ return [
                 'sls' => '',
             ],
         ],
+        'aHR0cDovL2xvY2FsaG9zdDo4NjAwL2xvZ2luLnBocD9hY3M=' => [
+            'destination' => 'http://localhost:8600/login.php?acs',
+            'logout' => 'http://localhost:8600/logout.php',
+            'certificate' => env('SP2_CERTIFICATE'),
+            'query_params' => [
+                'sls' => '',
+            ],
+        ],
         // Base64 encoded ACS URL
         // 'aHR0cHM6Ly9teWZhY2Vib29rd29ya3BsYWNlLmZhY2Vib29rLmNvbS93b3JrL3NhbWwucGhw' => [
         //     // Your destination is the ACS URL of the Service Provider
@@ -54,6 +62,7 @@ return [
     // key is beginning of HTTP_REFERER value from SERVER, value is redirect path
     'sp_slo_redirects' => [
         'http://localhost:8500/' => 'http://localhost:8500/',
+        'http://localhost:8600/' => 'http://localhost:8600/',
         // 'https://example.com' => 'https://example.com',
     ],
 

@@ -1,7 +1,10 @@
 <?php
 
-$certSpPath = __DIR__ . '/certs/cert.sp.pem';
-$keySpPath = __DIR__ . '/certs/key.sp.pem';
+$appUrl = $_ENV['APP_URL'];
+$spId = $_ENV['SP_ID'];
+
+$certSpPath = __DIR__ . "/certs/cert.{$spId}.pem";
+$keySpPath = __DIR__ . "/certs/key.{$spId}.pem";
 $certIdpPath = __DIR__ . '/certs/cert.idp.pem';
 
 return new \OneLogin\Saml2\Auth([
@@ -23,12 +26,12 @@ return new \OneLogin\Saml2\Auth([
     // Service Provider Data that we are deploying.
     'sp' => [
         // Identifier of the SP entity  (must be a URI)
-        'entityId' => 'http://localhost:8500/',
+        'entityId' => $appUrl,
         // Specifies info about where and how the <AuthnResponse> message MUST be
         // returned to the requester, in this case our SP.
         'assertionConsumerService' => [
             // URL Location where the <Response> from the IdP will be returned
-            'url' => 'http://localhost:8500/login.php?acs',
+            'url' => "{$appUrl}login.php?acs",
             // SAML protocol binding to be used when returning the <Response>
             // message. OneLogin Toolkit supports this endpoint for the
             // HTTP-POST binding only.
@@ -54,7 +57,7 @@ return new \OneLogin\Saml2\Auth([
         // returned to the requester, in this case our SP.
         'singleLogoutService' => [
             // URL Location where the <Response> from the IdP will be returned
-            'url' => 'http://localhost:8500/logout.php?acs',
+            'url' => "{$appUrl}/logout.php?acs",
             // SAML protocol binding to be used when returning the <Response>
             // message. OneLogin Toolkit supports the HTTP-Redirect binding
             // only for this endpoint.
