@@ -14,3 +14,17 @@ services:
       - "XDEBUG_HOST=${IDP_XDEBUG_HOST:-}"
     ports:
       - "${IDP_HTTP_PORT:-80}:80"
+
+  sp:
+    build:
+      context: .docker/sp
+    volumes:
+      - "./sp:/var/www/html:${VOLUME_CONSISTENCY:-consistent}"
+      - "./sp.ini:/usr/local/etc/php/conf.d/my.ini:ro"
+    environment:
+      - HOST_UID
+      - HOST_GID
+      - "XDEBUG_PORT=${SP_XDEBUG_PORT:-9000}"
+      - "XDEBUG_HOST=${SP_XDEBUG_HOST:-}"
+    ports:
+      - "${SP_HTTP_PORT:-80}:80"

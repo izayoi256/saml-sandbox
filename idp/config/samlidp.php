@@ -32,6 +32,14 @@ return [
     'digest_algorithm' => \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA1,
     // list of all service providers
     'sp' => [
+        'aHR0cDovL2xvY2FsaG9zdDo4NTAwL2xvZ2luLnBocD9hY3M=' => [
+            'destination' => 'http://localhost:8500/login.php?acs',
+            'logout' => 'http://localhost:8500/logout.php',
+            'certificate' => env('SP1_CERTIFICATE'),
+            'query_params' => [
+                'sls' => '',
+            ],
+        ],
         // Base64 encoded ACS URL
         // 'aHR0cHM6Ly9teWZhY2Vib29rd29ya3BsYWNlLmZhY2Vib29rLmNvbS93b3JrL3NhbWwucGhw' => [
         //     // Your destination is the ACS URL of the Service Provider
@@ -45,12 +53,15 @@ return [
     // If you need to redirect after SLO depending on SLO initiator
     // key is beginning of HTTP_REFERER value from SERVER, value is redirect path
     'sp_slo_redirects' => [
+        'http://localhost:8500/' => 'http://localhost:8500/',
         // 'https://example.com' => 'https://example.com',
     ],
 
     // All of the Laravel SAML IdP event / listener mappings.
     'events' => [
-        'CodeGreenCreative\SamlIdp\Events\Assertion' => [],
+        'CodeGreenCreative\SamlIdp\Events\Assertion' => [
+            \App\Listeners\SamlAssertionAttributes::class,
+        ],
         'Illuminate\Auth\Events\Logout' => [
             'CodeGreenCreative\SamlIdp\Listeners\SamlLogout',
         ],

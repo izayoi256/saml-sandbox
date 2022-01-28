@@ -24,10 +24,3 @@ Route::post('/login', function () {
     return redirect('/');
 })->name('login');
 
-Route::post('/logout', function () {
-    try {
-        \Illuminate\Support\Facades\Auth::logout();
-    } catch (\Illuminate\Http\Exceptions\HttpResponseException $e) {
-    }
-    return redirect('/');
-})->name('logout');
