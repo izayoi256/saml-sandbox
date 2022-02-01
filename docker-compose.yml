@@ -12,6 +12,14 @@ services:
       - HOST_GID
       - "XDEBUG_PORT=${IDP_XDEBUG_PORT:-9000}"
       - "XDEBUG_HOST=${IDP_XDEBUG_HOST:-}"
+      - "SP1_LOGIN=http://localhost:${SP1_HTTP_PORT:-8080}/login.php?acs"
+      - "SP1_LOGOUT=http://localhost:${SP1_HTTP_PORT:-8080}/logout.php"
+      - "SP1_APP_URL=http://localhost:${SP1_HTTP_PORT:-8080}/"
+      - "SP1_HTTP_REFERER=http://localhost:${SP1_HTTP_PORT:-8080}/"
+      - "SP2_LOGIN=http://localhost:${SP2_HTTP_PORT:-8888}/login.php?acs"
+      - "SP2_LOGOUT=http://localhost:${SP2_HTTP_PORT:-8888}/logout.php"
+      - "SP2_APP_URL=http://localhost:${SP2_HTTP_PORT:-8888}/"
+      - "SP2_HTTP_REFERER=http://localhost:${SP2_HTTP_PORT:-8888}/"
     ports:
       - "${IDP_HTTP_PORT:-8000}:80"
 
@@ -20,14 +28,17 @@ services:
       context: .docker/sp
     volumes:
       - "./sp:/var/www/html:${VOLUME_CONSISTENCY:-consistent}"
-      - "./sp.ini:/usr/local/etc/php/conf.d/my.ini:ro"
+      - "./sp1.ini:/usr/local/etc/php/conf.d/my.ini:ro"
+      - "./idp/storage/samlidp/cert.pem:/var/www/.certs/idp.cert.pem:ro"
+      - "./.certs/sp1.key.pem:/var/www/.certs/key.pem:ro"
+      - "./.certs/sp1.cert.pem:/var/www/.certs/cert.pem:ro"
     environment:
       - HOST_UID
       - HOST_GID
-      - "XDEBUG_PORT=${SP_XDEBUG_PORT:-9000}"
-      - "XDEBUG_HOST=${SP_XDEBUG_HOST:-}"
+      - "XDEBUG_PORT=${SP1_XDEBUG_PORT:-9000}"
+      - "XDEBUG_HOST=${SP1_XDEBUG_HOST:-}"
       - "APP_URL=http://localhost:${SP1_HTTP_PORT:-8080}/"
-      - "SP_ID=${SP1_ID:-sp1}"
+      - "IDP_APP_URL=http://localhost:${IDP_HTTP_PORT:-8000}/"
     ports:
       - "${SP1_HTTP_PORT:-8080}:80"
 
@@ -36,13 +47,16 @@ services:
       context: .docker/sp
     volumes:
       - "./sp:/var/www/html:${VOLUME_CONSISTENCY:-consistent}"
-      - "./sp.ini:/usr/local/etc/php/conf.d/my.ini:ro"
+      - "./sp2.ini:/usr/local/etc/php/conf.d/my.ini:ro"
+      - "./idp/storage/samlidp/cert.pem:/var/www/.certs/idp.cert.pem:ro"
+      - "./.certs/sp2.key.pem:/var/www/.certs/key.pem:ro"
+      - "./.certs/sp2.cert.pem:/var/www/.certs/cert.pem:ro"
     environment:
       - HOST_UID
       - HOST_GID
-      - "XDEBUG_PORT=${SP_XDEBUG_PORT:-9000}"
-      - "XDEBUG_HOST=${SP_XDEBUG_HOST:-}"
+      - "XDEBUG_PORT=${SP2_XDEBUG_PORT:-9000}"
+      - "XDEBUG_HOST=${SP2_XDEBUG_HOST:-}"
       - "APP_URL=http://localhost:${SP2_HTTP_PORT:-8888}/"
-      - "SP_ID=${SP2_ID:-sp2}"
+      - "IDP_APP_URL=http://localhost:${IDP_HTTP_PORT:-8000}/"
     ports:
       - "${SP2_HTTP_PORT:-8888}:80"

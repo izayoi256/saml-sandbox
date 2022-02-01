@@ -7,6 +7,8 @@ if (!isset($_SESSION['samlUserdata'])) {
     exit;
 }
 
+require __DIR__ . '/header.php';
+
 if (!empty($_SESSION['samlUserdata'])) {
     $attributes = $_SESSION['samlUserdata'];
     echo 'You have the following attributes:<br>';
@@ -23,4 +25,4 @@ if (!empty($_SESSION['samlUserdata'])) {
     echo "<p>You don't have any attribute</p>";
 }
 
-echo '<p><a href="logout.php" >Logout</a></p>';
+echo '<p><a href="logout.php" >ログアウト</a></p>';

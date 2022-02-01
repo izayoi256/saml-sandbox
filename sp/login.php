@@ -36,7 +36,7 @@ if (isset($_GET['acs'])) {
     $_SESSION['samlNameIdSPNameQualifier'] = $auth->getNameIdSPNameQualifier();
     $_SESSION['samlSessionIndex'] = $auth->getSessionIndex();
     unset($_SESSION['AuthNRequestID']);
-    if (isset($_POST['RelayState']) && 'http://localhost:8500/login.php' != $_POST['RelayState']) {
+    if (isset($_POST['RelayState'])) { // TODO 本来はオープンリダイレクト対策が必要
         // To avoid 'Open Redirect' attacks, before execute the
         // redirection confirm the value of $_POST['RelayState'] is a // trusted URL.
         $auth->redirectTo($_POST['RelayState']);

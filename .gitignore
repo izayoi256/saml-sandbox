@@ -1,3 +1,2 @@
 /.env
-/idp.ini
-/sp.ini
+/*.ini

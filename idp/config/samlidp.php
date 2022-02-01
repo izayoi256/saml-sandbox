@@ -1,5 +1,8 @@
 <?php
 
+$sp1KeyPath = storage_path('samlidp/sp1.cert.pem');
+$sp2KeyPath = storage_path('samlidp/sp2.cert.pem');
+
 return [
 
     /*
@@ -32,18 +35,22 @@ return [
     'digest_algorithm' => \RobRichards\XMLSecLibs\XMLSecurityDSig::SHA1,
     // list of all service providers
     'sp' => [
-        'aHR0cDovL2xvY2FsaG9zdDo4NTAwL2xvZ2luLnBocD9hY3M=' => [
-            'destination' => 'http://localhost:8500/login.php?acs',
-            'logout' => 'http://localhost:8500/logout.php',
-            'certificate' => env('SP1_CERTIFICATE'),
+        base64_encode(env('SP1_LOGIN')) => [
+            'destination' => env('SP1_LOGIN'),
+            'logout' => env('SP1_LOGOUT'),
+            'certificate' => file_exists($sp1KeyPath) && is_readable($sp1KeyPath)
+                ? file_get_contents($sp1KeyPath)
+                : null,
             'query_params' => [
                 'sls' => '',
             ],
         ],
-        'aHR0cDovL2xvY2FsaG9zdDo4NjAwL2xvZ2luLnBocD9hY3M=' => [
-            'destination' => 'http://localhost:8600/login.php?acs',
-            'logout' => 'http://localhost:8600/logout.php',
-            'certificate' => env('SP2_CERTIFICATE'),
+        base64_encode(env('SP2_LOGIN')) => [
+            'destination' => env('SP2_LOGIN'),
+            'logout' => env('SP2_LOGOUT'),
+            'certificate' => file_exists($sp2KeyPath) && is_readable($sp2KeyPath)
+                ? file_get_contents($sp2KeyPath)
+                : null,
             'query_params' => [
                 'sls' => '',
             ],
@@ -61,8 +68,8 @@ return [
     // If you need to redirect after SLO depending on SLO initiator
     // key is beginning of HTTP_REFERER value from SERVER, value is redirect path
     'sp_slo_redirects' => [
-        'http://localhost:8500/' => 'http://localhost:8500/',
-        'http://localhost:8600/' => 'http://localhost:8600/',
+        env('SP1_HTTP_REFERER') => env('SP1_APP_URL'),
+        env('SP2_HTTP_REFERER') => env('SP2_APP_URL'),
         // 'https://example.com' => 'https://example.com',
     ],
 
